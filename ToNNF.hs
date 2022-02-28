@@ -6,7 +6,7 @@ deleteImpls :: Formula -> Formula
 deleteImpls (Not f) = Not $ deleteImpls f
 deleteImpls (And f1 f2) = And (deleteImpls f1) (deleteImpls f2)
 deleteImpls (Or f1 f2) = Or (deleteImpls f1) (deleteImpls f2)
-deleteImpls (Impl f1 f2) = Or (Not f1) f2
+deleteImpls (Impl f1 f2) = Or (Not (deleteImpls f1)) (deleteImpls f2)
 deleteImpls (BidirectionalImpl f1 f2) = And (deleteImpls $ Impl f1 f2) (deleteImpls $ Impl f2 f1) 
 deleteImpls var = var
 
