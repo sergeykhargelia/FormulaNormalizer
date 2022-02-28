@@ -1,51 +1,41 @@
 module Tests where
 
-import Formula
+import TestsHelper
 import ToNNF
 import ToDNF
 import ToCNF
+import Formula
 
-testNNF1 :: String
-testNNF1 = "test 1 for NNF passed\n"
+input :: Int -> Formula
+input testId | testId == 1 = Atom "x"
+             | testId == 2 = And (Atom "x") (Atom "y")
+             | testId == 3 = Or Top (Not Bottom)
+             | testId == 4 = Not (And (Or Top Bottom) (Or (Atom "x") (Not (Atom "y"))))
+             | testId == 5 = Impl (input 2) (input 3)
+             | testId == 6 = BidirectionalImpl (input 3) (input 5)
+             | testId == 7 = Or (input 5) (input 6)
+             | testId == 8 = And (input 3) (input 5)
+             | testId == 9 = Not (Not (input 8))
+             | testId == 10 = Or (input 9) (input 1)
+             | otherwise = undefined
 
-testNNF2 :: String
-testNNF2 = "test 2 for NNF passed\n"
+testNNF :: Int -> String
+testNNF testId = let result = (toNNF . input) testId in
+                 if (isNNF result) 
+                     then "NNF test " ++ show testId ++ ": passed!\n"
+                 else 
+                     "NNF test " ++ show testId ++ ": failed!\n"
 
-testNNF3 :: String
-testNNF3 = "test 3 for NNF passed\n"
+testDNF :: Int -> String
+testDNF testId = let result = (toDNF . input) testId in
+                 if (isDNF result) 
+                     then "DNF test " ++ show testId ++ ": passed!\n"
+                 else 
+                     "DNF test " ++ show testId ++ ": failed!\n"
 
-testNNF4 :: String
-testNNF4 = "test 4 for NNF passed\n"
-
-testNNF5 :: String
-testNNF5 = "test 5 for NNF passed\n"
-
-testDNF1 :: String
-testDNF1 = "test 1 for DNF passed\n"
-
-testDNF2 :: String
-testDNF2 = "test 2 for DNF passed\n"
-
-testDNF3 :: String
-testDNF3 = "test 3 for DNF passed\n"
-
-testDNF4 :: String
-testDNF4 = "test 4 for DNF passed\n"
-
-testDNF5 :: String
-testDNF5 = "test 5 for DNF passed\n"
-
-testCNF1 :: String
-testCNF1 = "test 1 for CNF passed\n"
-
-testCNF2 :: String
-testCNF2 = "test 2 for CNF passed\n"
-
-testCNF3 :: String
-testCNF3 = "test 3 for CNF passed\n"
-
-testCNF4 :: String
-testCNF4 = "test 4 for CNF passed\n"
-
-testCNF5 :: String
-testCNF5 = "test 5 for CNF passed\n"
+testCNF :: Int -> String
+testCNF testId = let result = (toCNF . input) testId in
+                 if (isCNF result) 
+                     then "CNF test " ++ show testId ++ ": passed!\n"
+                 else 
+                     "CNF test " ++ show testId ++ ": failed!\n"
