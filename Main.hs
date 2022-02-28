@@ -4,22 +4,15 @@ import Tests
 import ToNNF
 import ToDNF
 import ToCNF
-import Formula
 
 main :: IO ()
 main = do
-    putStr testNNF1
-    putStr testNNF2
-    putStr testNNF3
-    putStr testNNF4
-    putStr testNNF5
-    putStr testDNF1
-    putStr testDNF2
-    putStr testDNF3
-    putStr testDNF4
-    putStr testDNF5
-    putStr testCNF1
-    putStr testCNF2
-    putStr testCNF3
-    putStr testCNF4
-    putStr testCNF5
+    runTests 1 
+        where runTests :: Int -> IO ()
+              runTests testId = if (testId <= 10) then do 
+                                    putStr (testNNF testId)
+                                    putStr (testDNF testId)
+                                    putStr (testCNF testId)
+                                    runTests (testId + 1)
+                                else do
+                                    putStr "Testing completed!\n"
